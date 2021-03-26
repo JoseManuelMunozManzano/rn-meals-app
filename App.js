@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { useSplashScreen } from './hooks/useSplashScreen';
+import MealsNavigator from './navigation/MealsNavigator';
 
 export default function App() {
   const { dataLoaded, onLayoutRootView } = useSplashScreen();
@@ -11,7 +13,7 @@ export default function App() {
 
   return (
     <View style={styles.screen} onLayout={onLayoutRootView}>
-      <Text>Hello!</Text>
+      <MealsNavigator />
     </View>
   );
 }
