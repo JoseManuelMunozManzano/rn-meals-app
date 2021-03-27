@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   FlatList,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,7 +8,6 @@ import {
 } from 'react-native';
 
 import { CATEGORIES } from '../data/dummy-data';
-import Colors from '../constants/Color';
 
 export const CategoriesScreen = ({ navigation }) => {
   const renderGridItem = itemData => {
@@ -48,10 +46,6 @@ export const CategoriesScreen = ({ navigation }) => {
 // Special property for which React Navigation will look
 CategoriesScreen.navigationOptions = {
   headerTitle: 'Meal Categories',
-  headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
-  },
-  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
 };
 
 const styles = StyleSheet.create({
