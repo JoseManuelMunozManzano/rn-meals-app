@@ -1,31 +1,29 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-import { CATEGORIES } from '../data/dummy-data';
+import { CATEGORIES, MEALS } from '../data/dummy-data';
 
 export const CategoryMealsScreen = ({ navigation }) => {
+  const renderMealItem = itemData => {
+    return (
+      <View>
+        <Text>{itemData.item.title}</Text>
+      </View>
+    );
+  };
+
   const catId = navigation.getParam('categoryId');
 
-  const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
+  const displayedMeals = MEALS.filter(
+    meal => meal.categoryIds.indexOf(catId) >= 0
+  );
 
   return (
     <View style={styles.screen}>
-      <Text>The Category Meals Screen!</Text>
-      <Text>{selectedCategory.title}</Text>
-      <Button
-        title="Go to Meal Details!"
-        onPress={() => {
-          navigation.navigate('MealDetail');
-        }}
-      />
-      <Button
-        title="Go Back"
-        onPress={() => {
-          // To go back you can use goBack() (in others navigators)
-          //navigation.goBack();
-          // Or, only in StackNavigator you can use pop() too
-          navigation.pop();
-        }}
+      <FlatList
+        data={displayedMeals}
+        keyExtractor={item => item.id}
+        renderItem={renderMealItem}
       />
     </View>
   );
