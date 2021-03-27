@@ -11,6 +11,15 @@ export const CategoryMealsScreen = ({ navigation }) => {
           navigation.navigate('MealDetail');
         }}
       />
+      <Button
+        title="Go Back"
+        onPress={() => {
+          // To go back you can use goBack() (in others navigators)
+          //navigation.goBack();
+          // Or, only in StackNavigator you can use pop() too
+          navigation.pop();
+        }}
+      />
     </View>
   );
 };
