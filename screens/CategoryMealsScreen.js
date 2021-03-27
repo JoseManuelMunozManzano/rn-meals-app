@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { CATEGORIES } from '../data/dummy-data';
+import Colors from '../constants/Color';
 
 export const CategoryMealsScreen = ({ navigation }) => {
   const catId = navigation.getParam('categoryId');
@@ -29,6 +30,22 @@ export const CategoryMealsScreen = ({ navigation }) => {
       />
     </View>
   );
+};
+
+// If this is a function React Navigation will call it automatically
+// and will pass in some navigation data
+CategoryMealsScreen.navigationOptions = navigationData => {
+  const catId = navigationData.navigation.getParam('categoryId');
+
+  const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
+
+  return {
+    headerTitle: selectedCategory.title,
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+    },
+    headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+  };
 };
 
 const styles = StyleSheet.create({
