@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     borderRadius: 10,
     overflow: 'hidden',
-    marginTop: 5,
+    marginTop: 10,
   },
   bgImage: {
     width: '100%',
