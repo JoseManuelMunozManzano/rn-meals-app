@@ -14,6 +14,7 @@ import { FavoritesScreen } from '../screens/FavoritesScreen';
 import { FiltersScreen } from '../screens/FiltersScreen';
 
 import Colors from '../constants/Color';
+import Color from '../constants/Color';
 
 LogBox.ignoreLogs([
   'Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).',
@@ -95,13 +96,40 @@ const MealsFavTabNavigator =
         },
       });
 
-const FiltersNavigator = createStackNavigator({
-  Filters: FiltersScreen,
-});
+const FiltersNavigator = createStackNavigator(
+  {
+    Filters: FiltersScreen,
+  },
+  {
+    // Option 1 for changing the title in the drawer tab: Only available if we use inside of other Navigator
+    // navigationOptions: {
+    //   drawerLabel: 'Filters!!!',
+    // },
+    defaultNavigationOptions: defaultStackNavOptions,
+    mode: 'modal',
+  }
+);
 
-const MainNavigator = createDrawerNavigator({
-  MealsFavs: MealsFavTabNavigator,
-  Filters: FiltersNavigator,
-});
+const MainNavigator = createDrawerNavigator(
+  {
+    // Option 2 for changing the title in the drawer tab
+    MealsFavs: {
+      screen: MealsFavTabNavigator,
+      navigationOptions: {
+        drawerLabel: 'Meals',
+      },
+    },
+    Filters: FiltersNavigator,
+  },
+  {
+    contentOptions: {
+      activeTintColor: Color.accentColor,
+      labelStyle: {
+        fontFamily: 'open-sans-bold',
+        fontWeight: 'normal', // necessary in order to work fontFamily
+      },
+    },
+  }
+);
 
 export default createAppContainer(MainNavigator);
