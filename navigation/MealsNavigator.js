@@ -19,6 +19,14 @@ LogBox.ignoreLogs([
   'Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).',
 ]);
 
+const defaultStackNavOptions = {
+  headerStyle: {
+    backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+  },
+  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+  headerTitle: 'A Screen',
+};
+
 const MealsNavigator = createStackNavigator(
   {
     Categories: {
@@ -30,14 +38,19 @@ const MealsNavigator = createStackNavigator(
     MealDetail: MealDetailScreen,
   },
   {
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
-      },
-      headerTintColor:
-        Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-    },
+    defaultNavigationOptions: defaultStackNavOptions,
+    mode: 'modal',
+  }
+);
 
+// What we really need for our Favorites tab is not a sigle screen but another stack
+const FavNavigator = createStackNavigator(
+  {
+    Favorites: FavoritesScreen,
+    MealDetail: MealDetailScreen,
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions,
     mode: 'modal',
   }
 );
@@ -55,7 +68,7 @@ const tabScreenConfig = {
     },
   },
   Favorites: {
-    screen: FavoritesScreen,
+    screen: FavNavigator,
     navigationOptions: {
       //tabBarLabel: 'Favorites!',
       tabBarIcon: tabInfo => {
