@@ -34,8 +34,15 @@ const styles = StyleSheet.create({
     margin: 15,
     height: 150,
     // To avoid ripple effect can't go outside of that rounded box
+    // Only for Android
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow:
+      Platform.OS === 'android' && Platform.Version >= 21
+        ? 'hidden'
+        : 'visible',
+    // elevation for Android
+    // We move it here, because overflow was eliminating this elevation
+    elevation: 5,
   },
   container: {
     flex: 1,
@@ -45,8 +52,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.26,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
-    // elevation for Android
-    elevation: 3,
 
     padding: 15,
     justifyContent: 'flex-end',
