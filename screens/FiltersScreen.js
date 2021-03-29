@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Platform, StyleSheet, Switch, Text, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
@@ -19,11 +19,43 @@ const FilterSwitch = ({ label, state, onChange }) => {
   );
 };
 
-export const FiltersScreen = () => {
+export const FiltersScreen = ({ navigation }) => {
   const [isGlutenFree, setIsGlutenFree] = useState(false);
   const [isLactoseFree, setIsLactoseFree] = useState(false);
   const [isVegan, setIsVegan] = useState(false);
   const [isVegetarian, setIsVegetarian] = useState(false);
+
+  // A way of communicating between component and navigation options.
+  // It's a typical pattern that you need when you have action items in
+  // your action bar and you want to trigger something that depends on
+  // data managed in your component with the help of these buttons.
+
+  // We use useCallback to avoid unnecessary rebuilds of this function.
+  // So that when you update the params and therefore this component rebuilds,
+  // you don't also rebuild that function and therefore also enter an infinite loop.
+  const saveFilters = useCallback(() => {
+    const appliedFilters = {
+      glutenFree: isGlutenFree,
+      lastoseFree: isLactoseFree,
+      vegan: isVegan,
+      vegetarian: isVegetarian,
+    };
+
+    console.log(appliedFilters);
+  }, [isGlutenFree, isLactoseFree, isVegan, isVegetarian]);
+
+  useEffect(() => {
+    // We can use setParams() to update the params values for the currently loaded screen.
+    // If you had existing params, you'd still use setParams() like this. Your new params
+    // get merged with existing params.
+    // IMPORTANT: setParams() causes the component to rebuild because its props
+    //    (the navigation prop) change
+    navigation.setParams({ save: saveFilters });
+    // We delete navigation because it will generate an infinite loop
+  }, [
+    //navigation,
+    saveFilters,
+  ]);
 
   return (
     <View style={styles.screen}>
@@ -62,6 +94,17 @@ FiltersScreen.navigationOptions = navData => {
           iconName="ios-menu"
           onPress={() => {
             navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Save"
+          iconName="ios-save"
+          onPress={() => {
+            navData.navigation.getParam('save')();
           }}
         />
       </HeaderButtons>
