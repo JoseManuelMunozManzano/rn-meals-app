@@ -42,7 +42,9 @@ const MealsNavigator = createStackNavigator(
     CategoryMeals: {
       screen: CategoryMealsScreen,
     },
-    MealDetail: MealDetailScreen,
+    MealDetail: {
+      screen: MealDetailScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -53,8 +55,8 @@ const MealsNavigator = createStackNavigator(
 // What we really need for our Favorites tab is not a sigle screen but another stack
 const FavNavigator = createStackNavigator(
   {
-    Favorites: FavoritesScreen,
-    MealDetail: MealDetailScreen,
+    Favorites: { screen: FavoritesScreen },
+    MealDetail: { screen: MealDetailScreen },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
