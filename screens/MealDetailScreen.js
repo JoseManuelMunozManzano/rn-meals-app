@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector } from 'react-redux';
@@ -20,6 +20,22 @@ export const MealDetailScreen = ({ navigation }) => {
   const { meals } = useSelector(state => state.meals);
 
   const selectedMeal = meals.find(meal => meal.id === mealId);
+
+  // First way to communicate redux data to navigation options
+  // With setParams() and useEffect() to avoid infinite loop
+  // NOT THE OPTIMAL SOLUTION because the first time we don't have the title
+  // and it last a moment to load.
+  // useEffect(() => {
+  //   navigation.setParams({ mealTitle: selectedMeal.title });
+  // }, [selectedMeal]);
+
+  // Second way to communicate redux data to navigation options
+  // Simply forward the title which we'll need from inside the
+  // component you're coming from, so that you load it when you are in the
+  // component that will go to his component and you send it to this component
+  // before it's loaded.
+  // So, we received the title from FavoritesScreen and CategoryMealsScreen
+  // and in both we use MealList, so there, in MealList, in the navigation, we add the title
 
   return (
     <ScrollView>
@@ -43,10 +59,16 @@ export const MealDetailScreen = ({ navigation }) => {
 
 MealDetailScreen.navigationOptions = navigationData => {
   const mealId = navigationData.navigation.getParam('mealId');
-  const selectedMeal = MEALS.find(meal => meal.id === mealId);
+  // First way to communicate redux data to navigation options
+  // Retrieving the params from useEffect() and setParams() above
+  // Or
+  // Second way to communicate redux data to navigation options
+  // Retrieving the params from MealList.js
+  const mealTitle = navigationData.navigation.getParam('mealTitle');
+  // const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
   return {
-    headerTitle: selectedMeal.title,
+    headerTitle: mealTitle,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
