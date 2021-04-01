@@ -19,6 +19,9 @@ export const MealDetailScreen = ({ navigation }) => {
   const mealId = navigation.getParam('mealId');
 
   const { meals } = useSelector(state => state.meals);
+  const { favoriteMeals } = useSelector(state => state.meals);
+
+  const currentMealIsFavorite = favoriteMeals.some(meal => meal.id === mealId);
 
   const selectedMeal = meals.find(meal => meal.id === mealId);
 
@@ -32,6 +35,12 @@ export const MealDetailScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({ toggleFav: toggleFavoriteHandler });
   }, [toggleFavoriteHandler]);
+
+  // This way, with useEffect, we have to wait for the first render to finish
+  // Instead we should pass this initial data into this component when we navigate to it
+  useEffect(() => {
+    navigation.setParams({ isFav: currentMealIsFavorite });
+  }, [currentMealIsFavorite]);
 
   // First way to communicate redux data to navigation options
   // With setParams() and useEffect() to avoid infinite loop
@@ -80,12 +89,17 @@ MealDetailScreen.navigationOptions = navigationData => {
   // const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
   const toggleFavorite = navigationData.navigation.getParam('toggleFav');
+  const isFavorite = navigationData.navigation.getParam('isFav');
 
   return {
     headerTitle: mealTitle,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item title="Favorite" iconName="ios-star" onPress={toggleFavorite} />
+        <Item
+          title="Favorite"
+          iconName={isFavorite ? 'ios-star' : 'ios-star-outline'}
+          onPress={toggleFavorite}
+        />
       </HeaderButtons>
     ),
   };
